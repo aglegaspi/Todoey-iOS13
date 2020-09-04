@@ -12,6 +12,7 @@ import CoreData
 class TodoListViewController: UITableViewController {
     
     var itemArray = [Item]()
+    @IBOutlet weak var searchBar: UISearchBar!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     // this goes into the App Delegate and grabs the persistent container and the reference to the context of that container
@@ -19,7 +20,7 @@ class TodoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-        
+        searchBar.delegate = self
         loadItems()
     }
     
@@ -34,9 +35,7 @@ class TodoListViewController: UITableViewController {
         
         let item = itemArray[indexPath.row]
         cell.textLabel?.text = item.title
-        
         cell.accessoryType = item.done == true ? .checkmark : .none
-        
         return cell
     }
     
@@ -99,14 +98,30 @@ class TodoListViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-    func loadItems() {
-        let request: NSFetchRequest<Item> = Item.fetchRequest() // specify the datatype of the request from the persistent constainer
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
+        
         do {
             self.itemArray = try context.fetch(request)
         } catch {
             print("Error fetching data from context \(error)")
         }
+        tableView.reloadData()
     }
     
 }
 
+//MARK: - SEARCHBAR METHODS
+extension TodoListViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!) //specifies how we want to query our data
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        loadItems(with: request)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+    }
+    
+}
