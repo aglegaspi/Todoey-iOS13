@@ -12,14 +12,14 @@ import CoreData
 class TodoListViewController: UITableViewController {
     
     var itemArray = [Item]()
-        
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     // this goes into the App Delegate and grabs the persistent container and the reference to the context of that container
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-
+        
         loadItems()
     }
     
@@ -42,8 +42,24 @@ class TodoListViewController: UITableViewController {
     
     //MARK: - TABLEVIEW DELEGATE METHODS
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let item = itemArray[indexPath.row]
         
-        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+        if !(item.title?.contains(" -- Completed"))! {
+            item.setValue("\(item.title ?? "") -- Completed", forKey: "title")
+        } else {
+            var sentence = item.title!
+            let wordToRemove = " -- Completed"
+            
+            if let range = sentence.range(of: wordToRemove) {
+                sentence.removeSubrange(range)
+            }
+            item.setValue(sentence, forKey: "title")
+        }
+        
+//        context.delete(item) // removing the data from our persistence container
+//        itemArray.remove(at: indexPath.row) // removes the current item from the datasource
+        
+        item.done = !item.done
         self.saveItems()
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -76,7 +92,7 @@ class TodoListViewController: UITableViewController {
     
     func saveItems() {
         do {
-            try context.save() // if successful the context will be saved to the persistent container
+            try context.save() // if successful the current state of context to be saved to the persistent container
         } catch {
             print("Error saving context with this \(error)")
         }
