@@ -12,16 +12,15 @@ import CoreData
 class TodoListViewController: UITableViewController {
     
     var itemArray = [Item]()
-    
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
-    
+        
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    // this goes into the App Delegate and grabs the persistent container and the reference to the context of that container
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(dataFilePath!)
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
 
-        //loadItems()
+        loadItems()
     }
     
     //MARK: - TABLEVIEW DATASOURCE METHODS
@@ -58,12 +57,11 @@ class TodoListViewController: UITableViewController {
         
         let alert = UIAlertController(title: "Add New Todey Item", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
-            let newItem = Item(context: self.context)
             
+            let newItem = Item(context: self.context) // stages data to be saved to the persistent container
             newItem.title = textField.text!
             newItem.done = false
             self.itemArray.append(newItem)
-                    
             self.saveItems()
         }
         
@@ -78,23 +76,21 @@ class TodoListViewController: UITableViewController {
     
     func saveItems() {
         do {
-            try context.save()
+            try context.save() // if successful the context will be saved to the persistent container
         } catch {
             print("Error saving context with this \(error)")
         }
         self.tableView.reloadData()
     }
     
-//    func loadItems() {
-//        if let data = try? Data(contentsOf: dataFilePath!) {
-//            let decoder = PropertyListDecoder()
-//            do {
-//                itemArray = try decoder.decode([Item].self, from: data)
-//            } catch {
-//                print(error)
-//            }
-//        }
-//    }
+    func loadItems() {
+        let request: NSFetchRequest<Item> = Item.fetchRequest() // specify the datatype of the request from the persistent constainer
+        do {
+            self.itemArray = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context \(error)")
+        }
+    }
     
 }
 
