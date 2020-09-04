@@ -14,10 +14,11 @@ class TodoListViewController: UITableViewController {
     
     //let defaults = UserDefaults.standard
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
-
+   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(dataFilePath!)
         
         let newItem = Item()
         newItem.title = "Find Mike Tomorrow"
@@ -31,10 +32,12 @@ class TodoListViewController: UITableViewController {
         newItem3.title = "Find Mike Later"
         itemArray.append(newItem3)
         
+        loadItems()
         
-//        if let items = defaults.array(forKey: "ToDoListArray") as? [Item] {
-//            itemArray = items
-//        }
+        
+        //        if let items = defaults.array(forKey: "ToDoListArray") as? [Item] {
+        //            itemArray = items
+        //        }
     }
     
     //MARK: - TABLEVIEW DATASOURCE METHODS
@@ -80,7 +83,7 @@ class TodoListViewController: UITableViewController {
             //self.defaults.set(self.itemArray, forKey: "ToDoListArray")
             
             self.saveItems()
-    
+            
         }
         
         alert.addTextField { (alertTextField) in
@@ -99,10 +102,20 @@ class TodoListViewController: UITableViewController {
             let data = try encoder.encode(self.itemArray)
             try data.write(to: self.dataFilePath!)
         } catch { print(error) }
-        
         tableView.reloadData()
     }
     
+    func loadItems() {
+        
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            do {
+                itemArray = try decoder.decode([Item].self, from: data)
+            } catch {
+                print(error)
+            }
+        }
+    }
     
 }
 
