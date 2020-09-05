@@ -12,6 +12,12 @@ import CoreData
 class TodoListViewController: UITableViewController {
     
     var itemArray = [Item]()
+    var selectedCategory: Category? {
+        didSet {
+            loadItems()
+        }
+    }
+    
     @IBOutlet weak var searchBar: UISearchBar!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -21,7 +27,6 @@ class TodoListViewController: UITableViewController {
         super.viewDidLoad()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         searchBar.delegate = self
-        loadItems()
     }
     
     //MARK: - TABLEVIEW DATASOURCE METHODS
@@ -33,48 +38,37 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
         let item = itemArray[indexPath.row]
+        cell.textLabel?.textColor = item.done ? .gray : .black
         cell.textLabel?.text = item.title
-        cell.accessoryType = item.done == true ? .checkmark : .none
+        cell.accessoryType = item.done ? .checkmark : .none
         return cell
     }
     
     //MARK: - TABLEVIEW DELEGATE METHODS
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = itemArray[indexPath.row]
-        
-        if !(item.title?.contains(" -- Completed"))! {
-            item.setValue("\(item.title ?? "") -- Completed", forKey: "title")
-        } else {
-            var sentence = item.title!
-            let wordToRemove = " -- Completed"
-            
-            if let range = sentence.range(of: wordToRemove) {
-                sentence.removeSubrange(range)
-            }
-            item.setValue(sentence, forKey: "title")
-        }
-        
+    
 //        context.delete(item) // removing the data from our persistence container
 //        itemArray.remove(at: indexPath.row) // removes the current item from the datasource
         
         item.done = !item.done
-        self.saveItems()
+        saveItems()
         
         tableView.deselectRow(at: indexPath, animated: true)
-        
     }
     
     //MARK: - ADD NEW ITEMS
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
-        
         var textField = UITextField()
         
         let alert = UIAlertController(title: "Add New Todey Item", message: "", preferredStyle: .alert)
+        
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             
             let newItem = Item(context: self.context) // stages data to be saved to the persistent container
             newItem.title = textField.text!
             newItem.done = false
+            newItem.parentCategory = self.selectedCategory
             self.itemArray.append(newItem)
             self.saveItems()
         }
@@ -88,6 +82,8 @@ class TodoListViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    
+    //MARK: - MODEL MANIPULATION METHODS
     func saveItems() {
         do {
             try context.save() // if successful the current state of context to be saved to the persistent container
@@ -97,7 +93,14 @@ class TodoListViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        
+        if let additionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,additionalPredicate])
+        } else {
+            request.predicate = categoryPredicate
+        }
         
         do {
             self.itemArray = try context.fetch(request)
@@ -113,10 +116,11 @@ class TodoListViewController: UITableViewController {
 extension TodoListViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let request: NSFetchRequest<Item> = Item.fetchRequest()
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!) //specifies how we want to query our data
+        
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!) //specifies how we want to query our data
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
-        loadItems(with: request)
+        loadItems(with: request, predicate: predicate)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
