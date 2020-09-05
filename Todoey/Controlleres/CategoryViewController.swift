@@ -16,7 +16,7 @@ class CategoryViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadItems()
+        loadCategories()
     }
     
     //MARK: - TABLEVIEW DATASOURCE METHODS
@@ -31,8 +31,6 @@ class CategoryViewController: UITableViewController {
         return cell
     }
     
-    //MARK: - DATA MANIPULATIONS METHODS
-    
     
     //MARK: - ADD NEW CATEGORIES
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -43,7 +41,7 @@ class CategoryViewController: UITableViewController {
             let newCategory = Category(context: self.context) // stages data to be saved to the persistent container
             newCategory.name = textField.text!
             self.categoryArray.append(newCategory)
-            self.saveItems()
+            self.saveCategories()
         }
         
         alert.addTextField { (alertTextField) in
@@ -55,7 +53,9 @@ class CategoryViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func saveItems() {
+    
+    //MARK: - DATA MANIPULATIONS METHODS
+    func saveCategories() {
         do {
             try context.save() // if successful the current state of context to be saved to the persistent container
         } catch {
@@ -64,7 +64,7 @@ class CategoryViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-    func loadItems(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
+    func loadCategories(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
         
         do {
             self.categoryArray = try context.fetch(request)
