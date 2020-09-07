@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import RealmSwift
+import SwipeCellKit
 
 class TodoListViewController: UITableViewController {
     
@@ -35,14 +36,20 @@ class TodoListViewController: UITableViewController {
         return todoItems?.count ?? 1
     }
     
+//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! SwipeTableViewCell
+//        cell.delegate = self
+//        return cell
+//    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
-        
+    
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath) as! SwipeTableViewCell
+        cell.delegate = self
         if let item = todoItems?[indexPath.row] {
             cell.textLabel?.textColor = item.done ? .gray : .black
             cell.textLabel?.text = item.title
             cell.accessoryType = item.done ? .checkmark : .none
-            print(item.dateCreated)
         } else {
             cell.textLabel?.text = "No Items Added"
         }
@@ -122,7 +129,7 @@ extension TodoListViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
             loadItems()
-            //when we dismiss our SearchBar call  loadItems() 
+            //when we dismiss our SearchBar call  loadItems()
 
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
@@ -130,4 +137,25 @@ extension TodoListViewController: UISearchBarDelegate {
         }
     }
 
+}
+
+
+//MARK: - SWIPE CELL DELEGATE METHODS
+extension TodoListViewController: SwipeTableViewCellDelegate {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        // what should happen when a use swipes a cell
+        
+        guard orientation == .right else { return nil } // checek for the orientation of the cell swipes from the right
+
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            // handle action by updating model with deletion
+        }
+
+        // customize the action appearance
+        deleteAction.image = UIImage(named: "delete-icon")
+
+        return [deleteAction]
+    }
+    
+    
 }
