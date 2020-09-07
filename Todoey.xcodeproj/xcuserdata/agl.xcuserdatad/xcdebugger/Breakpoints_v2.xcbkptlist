@@ -7,86 +7,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "BCA5270C-66BB-4C3B-B383-8104F75E86AB"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Todoey/Controlleres/TodoListViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
-            landmarkName = "TodoListViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "2DD5F1B0-44D1-4196-9D8B-D132B502C3F3"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Todoey/Controlleres/TodoListViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
-            landmarkName = "TodoListViewController"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "2DD5F1B0-44D1-4196-9D8B-D132B502C3F3 - 3562215bbd1b8058"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Todoey.TodoListViewController.loadItems(with: __C.NSFetchRequest&lt;Todoey.Item&gt;, predicate: Swift.Optional&lt;__C.NSPredicate&gt;) -&gt; ()"
-                  moduleName = "Todoey"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/agl/Documents/personal/Todoey-iOS13/Todoey/Controlleres/TodoListViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "116"
-                  endingLineNumber = "116"
-                  offsetFromSymbolStart = "1520">
-               </Location>
-               <Location
-                  uuid = "2DD5F1B0-44D1-4196-9D8B-D132B502C3F3 - 3562215bbd1b8058"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Todoey.TodoListViewController.loadItems(with: __C.NSFetchRequest&lt;Todoey.Item&gt;, predicate: Swift.Optional&lt;__C.NSPredicate&gt;) -&gt; ()"
-                  moduleName = "Todoey"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/agl/Documents/personal/Todoey-iOS13/Todoey/Controlleres/TodoListViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "116"
-                  endingLineNumber = "116"
-                  offsetFromSymbolStart = "1918">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "C48EA173-F87B-488B-8B20-D124E4F37FB5"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Todoey/Controlleres/TodoListViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
-            landmarkName = "TodoListViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "9C6E0138-0573-4F5D-B23B-78B38D2C42F6"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -94,10 +14,10 @@
             filePath = "Todoey/Controlleres/TodoListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
             landmarkName = "TodoListViewController"
-            landmarkType = "21">
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
