@@ -28,6 +28,7 @@ class TodoListViewController: UITableViewController {
         super.viewDidLoad()
         //print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         searchBar.delegate = self
+        tableView.rowHeight = 80.0
     }
     
     //MARK: - TABLEVIEW DATASOURCE METHODS
@@ -142,20 +143,35 @@ extension TodoListViewController: UISearchBarDelegate {
 
 //MARK: - SWIPE CELL DELEGATE METHODS
 extension TodoListViewController: SwipeTableViewCellDelegate {
+    
+    // TODO:  MAKE THE CELL DELETE ON SWIPE TO LEFT
+    func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        options.expansionStyle = .destructive
+        return options
+    }
+    
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         // what should happen when a use swipes a cell
         
         guard orientation == .right else { return nil } // checek for the orientation of the cell swipes from the right
 
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            // handle action by updating model with deletion
+            
+            if let itemToDelete = self.todoItems?[indexPath.row] {
+                do {
+                    try self.realm.write {
+                        self.realm.delete(itemToDelete) // delete item from the database
+                    }
+                } catch {
+                        print("Error deleting Iteam \(error)")
+                }
+                tableView.reloadData()
+            }
         }
-
-        // customize the action appearance
         deleteAction.image = UIImage(named: "delete-icon")
 
         return [deleteAction]
     }
-    
     
 }
