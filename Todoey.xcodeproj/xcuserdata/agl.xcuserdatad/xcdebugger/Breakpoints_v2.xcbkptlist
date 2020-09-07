@@ -16,8 +16,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "106"
             endingLineNumber = "106"
-            landmarkName = "loadItems(with:predicate:)"
-            landmarkType = "7">
+            landmarkName = "TodoListViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -32,8 +32,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "107"
             endingLineNumber = "107"
-            landmarkName = "loadItems(with:predicate:)"
-            landmarkType = "7">
+            landmarkName = "TodoListViewController"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "2DD5F1B0-44D1-4196-9D8B-D132B502C3F3 - 3562215bbd1b8058"
@@ -80,8 +80,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "108"
             endingLineNumber = "108"
-            landmarkName = "loadItems(with:predicate:)"
-            landmarkType = "7">
+            landmarkName = "TodoListViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -96,8 +96,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "123"
             endingLineNumber = "123"
-            landmarkName = "searchBarSearchButtonClicked(_:)"
-            landmarkType = "7">
+            landmarkName = "TodoListViewController"
+            landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
