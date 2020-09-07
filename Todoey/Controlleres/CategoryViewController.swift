@@ -12,8 +12,9 @@ import RealmSwift
 
 class CategoryViewController: UITableViewController {
     
-    let realm = try! Realm()
-    var categories: Results<Category>?
+    let realm = try! Realm() // initialize a new access point to Realm
+    
+    var categories: Results<Category>? // an Optional collection of Results that are Category objects
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +40,7 @@ class CategoryViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! TodoListViewController
+        
         if let indexPath = tableView.indexPathForSelectedRow {
             destinationVC.selectedCategory = categories?[indexPath.row]
         }
@@ -47,8 +49,8 @@ class CategoryViewController: UITableViewController {
     //MARK: - DATA MANIPULATIONS METHODS
     func saveCategories(category: Category) {
         do {
-            try realm.write {
-                realm.add(category)
+            try realm.write { // commit changes to our Realm
+                realm.add(category) // we want to add our new category to our Database
             }
         } catch {
             print("Error saving context with this \(error)")
@@ -57,7 +59,7 @@ class CategoryViewController: UITableViewController {
     }
     
     func loadCategories() {
-        categories = realm.objects(Category.self)
+        categories = realm.objects(Category.self) // we set our categories objects to look inside our Realm and fetch all of the objects that match the Category type
         
         tableView.reloadData()
     }
@@ -67,8 +69,9 @@ class CategoryViewController: UITableViewController {
         var textField = UITextField()
         
         let alert = UIAlertController(title: "Add New Todey Category", message: "", preferredStyle: .alert)
+        
         let action = UIAlertAction(title: "Add Category", style: .default) { (action) in
-            let newCategory = Category() // stages data to be saved to the persistent container
+            let newCategory = Category()
             newCategory.name = textField.text!
             self.saveCategories(category: newCategory)
         }

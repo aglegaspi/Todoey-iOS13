@@ -54,8 +54,8 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let item = todoItems?[indexPath.row] {
             do {try realm.write {
-                //realm.delete(item) // to delete items from the database
                 item.done = !item.done
+                //realm.delete(item) // to delete items from the database
                 }} catch {
                     print("can't update \(error)")
             }
@@ -68,7 +68,7 @@ class TodoListViewController: UITableViewController {
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField = UITextField()
         
-        let alert = UIAlertController(title: "Add New Todey Item", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add New Item", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             
@@ -79,7 +79,7 @@ class TodoListViewController: UITableViewController {
                         newItem.title = textField.text!
                         newItem.done = false
                         newItem.dateCreated = Date()
-                        currentCategory.items.append(newItem)
+                        currentCategory.items.append(newItem)// append this new Item to that List of Items in the current Category object
                     }
                 } catch {
                    print("Could not save new Item because --- \(error)")
@@ -101,6 +101,7 @@ class TodoListViewController: UITableViewController {
     //MARK: - MODEL MANIPULATION METHODS
     func loadItems() {
         todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
+        // load the items that affliated with the selected category property called "items" and then sort them by title in alphabetical order
         
         tableView.reloadData()
     }
@@ -112,6 +113,8 @@ extension TodoListViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         todoItems = todoItems?.filter("title CONTAINS[cd] %@", searchBar.text!)
             .sorted(byKeyPath: "dateCreated", ascending: true)
+        // filter via predicate which say that the Title must contain this argument, the arugument what whatever was entered into the SearchBar
+        // then we sort the items by the date created in alphabetical order
 
         tableView.reloadData()
     }
@@ -119,6 +122,7 @@ extension TodoListViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
             loadItems()
+            //when we dismiss our SearchBar call  loadItems() 
 
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
