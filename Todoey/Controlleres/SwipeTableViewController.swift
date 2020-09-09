@@ -10,6 +10,8 @@ import UIKit
 import SwipeCellKit
 
 class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegate {
+    
+   // typealias ResultObjecets = [Category,Item]
 
     override func viewDidLoad() {
         super.viewDidLoad()

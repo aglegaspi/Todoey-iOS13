@@ -27,7 +27,6 @@ class CategoryViewController: SwipeTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = super.tableView(tableView.self, cellForRowAt: indexPath)
         
         cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories Added Yet!"
@@ -44,7 +43,7 @@ class CategoryViewController: SwipeTableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! TodoListViewController
         
-        if let indexPath = tableView.indexPathForSelectedRow {
+        if let indexPath = tableView.indexPathForSelectedRow { // ALLOWS FOR EXTERNAL ACCESS TO INDEXPATH
             destinationVC.selectedCategory = categories?[indexPath.row]
         }
     }
@@ -65,6 +64,19 @@ class CategoryViewController: SwipeTableViewController {
         categories = realm.objects(Category.self) // we set our categories objects to look inside our Realm and fetch all of the objects that match the Category type
         
         tableView.reloadData()
+    }
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let categoryToDelete = self.categories?[indexPath.row] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(categoryToDelete) // delete item from the database
+                }
+            } catch {
+                print("Error deleting Iteam \(error)")
+            }
+            tableView.reloadData()
+        }
     }
     
     //MARK: - ADD NEW CATEGORIES
