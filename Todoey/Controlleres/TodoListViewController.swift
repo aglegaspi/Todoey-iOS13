@@ -27,8 +27,27 @@ class TodoListViewController: SwipeTableViewController {
         super.viewDidLoad()
         //print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         searchBar.delegate = self
-        
+        searchBar.placeholder = "Search For Item Here"
+        searchBar.isTranslucent = false
+        searchBar.backgroundImage = UIImage()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        if let colorHex = selectedCategory?.cellColor {
+            title = selectedCategory!.name
+            
+            guard let navBar = navigationController?.navigationBar else { fatalError("Navigation Bar Controller does not exist") }
+            if let navBarColor = UIColor(hexString: colorHex) {
+                navBar.backgroundColor = navBarColor
+                navBar.tintColor = ContrastColorOf(navBarColor, returnFlat: true)
+                navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : ContrastColorOf(navBarColor, returnFlat: true)]
+                searchBar.barTintColor = navBarColor
+            }
+            
+        }
+    }
+    
     
     //MARK: - TABLEVIEW DATASOURCE METHODS
     

@@ -31,7 +31,6 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Todoey" id="evl-fg-Bnx">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="7cw-d9-nc5">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <action selector="addButtonPressed:" destination="77g-Zl-M7t" id="LBW-eG-n4t"/>
                             </connections>
@@ -94,8 +93,8 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="RdK-tv-G2I" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="pVV-xC-gjb">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="pVV-xC-gjb">
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.71920211229999997" green="0.17171223960000001" blue="0.47318070020000003" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
