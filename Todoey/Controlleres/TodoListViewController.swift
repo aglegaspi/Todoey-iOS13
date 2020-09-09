@@ -7,11 +7,9 @@
 //
 
 import UIKit
-import CoreData
 import RealmSwift
-import SwipeCellKit
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipeTableViewController {
     
     let realm = try! Realm()
     var todoItems: Results<Item>?
@@ -28,7 +26,7 @@ class TodoListViewController: UITableViewController {
         super.viewDidLoad()
         //print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         searchBar.delegate = self
-        tableView.rowHeight = 80.0
+        
     }
     
     //MARK: - TABLEVIEW DATASOURCE METHODS
@@ -37,16 +35,11 @@ class TodoListViewController: UITableViewController {
         return todoItems?.count ?? 1
     }
     
-//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! SwipeTableViewCell
-//        cell.delegate = self
-//        return cell
-//    }
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath) as! SwipeTableViewCell
-        cell.delegate = self
+        // modularize our code and keep it dry
+        let cell = super.tableView(tableView.self, cellForRowAt: indexPath) // Taps into our cell in the super view SwipeTableViewController
+        
         if let item = todoItems?[indexPath.row] {
             cell.textLabel?.textColor = item.done ? .gray : .black
             cell.textLabel?.text = item.title
@@ -140,38 +133,3 @@ extension TodoListViewController: UISearchBarDelegate {
 
 }
 
-
-//MARK: - SWIPE CELL DELEGATE METHODS
-extension TodoListViewController: SwipeTableViewCellDelegate {
-    
-    // TODO:  MAKE THE CELL DELETE ON SWIPE TO LEFT
-    func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
-        var options = SwipeOptions()
-        options.expansionStyle = .destructive
-        return options
-    }
-    
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        // what should happen when a use swipes a cell
-        
-        guard orientation == .right else { return nil } // checek for the orientation of the cell swipes from the right
-
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            
-            if let itemToDelete = self.todoItems?[indexPath.row] {
-                do {
-                    try self.realm.write {
-                        self.realm.delete(itemToDelete) // delete item from the database
-                    }
-                } catch {
-                        print("Error deleting Iteam \(error)")
-                }
-                tableView.reloadData()
-            }
-        }
-        deleteAction.image = UIImage(named: "delete-icon")
-
-        return [deleteAction]
-    }
-    
-}
