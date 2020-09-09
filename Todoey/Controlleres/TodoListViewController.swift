@@ -36,7 +36,7 @@ class TodoListViewController: SwipeTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
+        
         // modularize our code and keep it dry
         let cell = super.tableView(tableView.self, cellForRowAt: indexPath) // Taps into our cell in the super view SwipeTableViewController
         
@@ -83,7 +83,7 @@ class TodoListViewController: SwipeTableViewController {
                         currentCategory.items.append(newItem)// append this new Item to that List of Items in the current Category object
                     }
                 } catch {
-                   print("Could not save new Item because --- \(error)")
+                    print("Could not save new Item because --- \(error)")
                 }
             }
             self.tableView.reloadData()
@@ -107,29 +107,43 @@ class TodoListViewController: SwipeTableViewController {
         tableView.reloadData()
     }
     
+    //MARK: - DELETE DATA FROM SWIPE
+    override func updateModel(at indexPath: IndexPath) {
+        if let itemToDelete = self.todoItems?[indexPath.row] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(itemToDelete) // delete item from the database
+                }
+            } catch {
+                print("Error deleting Iteam \(error)")
+            }
+            tableView.reloadData()
+        }
+    }
+    
 }
 
-//MARK: - SEARCHBAR METHODS
+//MARK: - SEARCHBAR DELEGATE
 extension TodoListViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         todoItems = todoItems?.filter("title CONTAINS[cd] %@", searchBar.text!)
             .sorted(byKeyPath: "dateCreated", ascending: true)
         // filter via predicate which say that the Title must contain this argument, the arugument what whatever was entered into the SearchBar
         // then we sort the items by the date created in alphabetical order
-
+        
         tableView.reloadData()
     }
-
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
             loadItems()
             //when we dismiss our SearchBar call  loadItems()
-
+            
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }
         }
     }
-
+    
 }
 

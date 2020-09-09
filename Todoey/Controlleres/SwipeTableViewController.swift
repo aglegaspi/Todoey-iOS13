@@ -33,21 +33,18 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         guard orientation == .right else { return nil } // checek for the orientation of the cell swipes from the right
 
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            print("delete cell")
-//            if let itemToDelete = self.todoItems?[indexPath.row] {
-//                do {
-//                    try self.realm.write {
-//                        self.realm.delete(itemToDelete) // delete item from the database
-//                    }
-//                } catch {
-//                        print("Error deleting Iteam \(error)")
-//                }
-//                tableView.reloadData()
-//            }
+            
+            self.updateModel(at: indexPath)
+            
         }
         deleteAction.image = UIImage(named: "delete-icon")
 
         return [deleteAction]
+    }
+    
+    func updateModel(at indexPath: IndexPath) {
+        //update our data model
+        
     }
 
     
